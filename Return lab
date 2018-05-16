@@ -1,0 +1,48 @@
+int S_Beacon = //Sensor pin
+int IRVolt;
+int CurrOut = 0;
+int PrevOut = 0;
+int Ex = 0;
+
+int AnalogOutput(int Sensor){
+  IRVolt = analogRead(Sensor);
+  MapIR = map(IRVolt, Volt_Low, Volt_High, 0, 255);
+  return MapIR;
+}
+
+void SearchLab(Sensor){
+  int K = 1;
+  while (K=1){
+    CurrOut = AnalogOutput(Sensor);
+    if (CurrOut < PrevOut){
+      TurnLeft(15)
+      K=0;
+    }
+    else{
+      PrevOut = CurrOut;
+      TurnRight(15); //Keep going in a circle until the intensity starts lowering
+    }
+  }
+}
+
+void CheckCourse(int Sensor){
+  int K = 1;
+  while (K=1){
+    CurrOut = AnalogOutput(Sensor);
+    if (CurrOut < PrevOut){
+      Stop();
+      K=0;
+    }
+    else{
+      PrevOut = CurrOut;
+    }
+  }
+}
+
+void ReturnLab(){
+SearchLab();
+Forward();
+CheckCourse();
+}
+
+
