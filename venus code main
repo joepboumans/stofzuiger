@@ -1,0 +1,16 @@
+\\Constants/pins
+
+
+\\Functions
+int IRground(int PinLoc){
+  if(digitalRead(PinLoc) ==0){
+    return 0;
+  }else{ return 1;
+}
+}
+
+void setup(){
+}
+
+void loop(){
+}
