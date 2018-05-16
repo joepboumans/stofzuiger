@@ -2,7 +2,7 @@
 
 
 \\Functions
-int IRground(int PinLoc){
+int CheckGround(int PinLoc){
   if(digitalRead(PinLoc) ==0){
     return 0;
   }else{ return 1;
