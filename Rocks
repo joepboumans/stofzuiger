@@ -1,0 +1,39 @@
+int RS=A0;
+int LS=A1;
+int RIGHTSERVO=13;
+int LEFTSERVO=12;
+
+void setup()
+{
+  Serial.begin(9600)
+  pinMode(LS, INPUT);
+  pinMode(RS, INPUT);
+  pinMode(LEFTSERVO, OUTPUT);
+  pinMode(RIGHTSERVO, OUTPUT);
+}
+
+void loop()
+{
+ 
+  if(digitalRead(LS) && !digitalRead(RS) )// Turn Left
+  { turnleft();}
+  if(!digitalRead(LS) && digitalRead(RS) )// Turn Right
+  {turnright(); }
+   if(digitalRead(LS) && digitalRead(RS)) //Go forward
+  { forward(distanceF,forwardspeedF);
+  distancefront=USmeasure();
+  check(distancefront);
+
+  }
+  
+}
+void check(int cm){
+if (cm<=5)
+{stopRobot();
+pickup(forwardtime);
+ReturnLab();
+}
+
+}
+
+ 
