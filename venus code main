@@ -1,15 +1,121 @@
-\\Constants/pins
+#include <Servo.h>
 
+Servo servoLeft, servoRight, servoGripper, servoEyes;
+
+\\Constants/pins
+const float speed = 0.23;
+const float rotationalspeed = 0.50; // rotations per second
+int pos = 0;    // variable to store the servo position
+float distance;
+int encoderLeft=7;
+int encoderRight=8;
+int rightIRS//= [Right IR sensor pin];
+int leftIRS//= [Left IR sensor pin];
+int us//=[Ultrasound sensor pin];
+int topIRS;// =pin for top sensor
+int topIRSVolt;
+float mapIR;
+float volt_Low;//=lowvalue
+float volt_High;//=highvalue
 
 \\Functions
-int CheckGround(int PinLoc){
+int digitalOutput(int PinLoc){
   if(digitalRead(PinLoc) ==0){
     return 0;
   }else{ return 1;
 }
 }
 
+void forward(float distanceF, float forwardspeedF) {
+  float result;
+  result = (distanceF / forwardspeedF) * 1000;
+  servoLeft.writeMicroseconds(1900);         // Left wheel counterclockwise
+  servoRight.writeMicroseconds(1000);
+//  servoLeft.write(180);
+//  servoRight.write(40);
+//    servoRight.write(3);
+  delay(result);
+}
+
+void readspeed(){
+  int encoderoutputLeft=digitalRead(encoderLeft);
+  Serial.write(encoderoutputLeft);
+  delay(2);
+}
+
+void turning(int degrees, float rotationalspeed) {
+    float result;
+    result = (degrees / (rotationalspeed * 360)) * 1000;
+    Serial.println("Result computed: ");
+    Serial.print(result);
+    Serial.println();
+    delay(100);
+    servoLeft.write(180);
+    servoRight.write(180);
+    delay(result);
+    }
+
+void stopRobot() {
+    servoLeft.write(90);
+    servoRight.write(90);
+  }
+
+int analogOutput(int Sensor){
+  IRVolt = analogRead(Sensor);
+  MapIR = map(IRVolt, Volt_Low, Volt_High, 0, 255);
+  return MapIR;
+}
+
+void searchLab(int Sensor){
+  int K = 1;
+  int CurrOut = 0;
+  int PrevOut = 0;
+  while (K=1){
+    CurrOut = AnalogOutput(Sensor);
+    if (CurrOut < PrevOut){
+      turnLeft(15);
+      K=0;
+    }
+    else{
+      PrevOut = CurrOut;
+      turnRight(15); //Keep going in a circle until the intensity starts lowering
+    }
+  }
+}
+
+void checkCourse(int Sensor){
+  int K = 1;
+  int CurrOut = 0;
+  int PrevOut = 0;
+  while (K=1){
+    CurrOut = AnalogOutput(Sensor);
+    if (CurrOut < PrevOut){
+      stopRobot();
+      K=0;
+    }
+    else{
+      PrevOut = CurrOut;
+    }
+  }
+}
+
+void returnLab(){
+//while the lab hasnt been found
+searchLab();
+forward();
+checkCourse();
+}
+
 void setup(){
+  servoEyes.attach(11);
+  servoEyes.write(90);
+  servoRight.attach(13);
+  servoLeft.attach(12);
+  servoGripper.attach(10);// attaches the servo on pin 9 to the servo object
+  servoGripper.write(90);
+  pinMode(encoderLeft, INPUT);
+  pinMode(encoderRight,INPUT);
+  Serial.begin(9600);
 }
 
 void loop(){
