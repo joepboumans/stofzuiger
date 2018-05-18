@@ -1,8 +1,11 @@
-int S_Beacon = //Sensor pin
+int S_Beacon;// =Sensor pin
 int IRVolt;
 int CurrOut = 0;
 int PrevOut = 0;
 int Ex = 0;
+float MapIR;
+float Volt_Low;//=lowvalue
+float Volt_High;//=highvalue
 
 int AnalogOutput(int Sensor){
   IRVolt = analogRead(Sensor);
@@ -10,12 +13,12 @@ int AnalogOutput(int Sensor){
   return MapIR;
 }
 
-void SearchLab(Sensor){
+void SearchLab(int Sensor){
   int K = 1;
   while (K=1){
     CurrOut = AnalogOutput(Sensor);
     if (CurrOut < PrevOut){
-      TurnLeft(15)
+      TurnLeft(15);
       K=0;
     }
     else{
@@ -30,7 +33,7 @@ void CheckCourse(int Sensor){
   while (K=1){
     CurrOut = AnalogOutput(Sensor);
     if (CurrOut < PrevOut){
-      Stop();
+      stopRobot();
       K=0;
     }
     else{
@@ -40,8 +43,9 @@ void CheckCourse(int Sensor){
 }
 
 void ReturnLab(){
+//while the lab hasnt been found
 SearchLab();
-Forward();
+forward();
 CheckCourse();
 }
 
