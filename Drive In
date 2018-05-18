@@ -1,0 +1,118 @@
+int CheckLeft(int leng, int dist1){
+    int dist;
+    Turnleft(90);
+    Forward(leng);
+    Turnright(90);
+    dist=CheckDistance();
+    if(dist<=0 || dist>=10){
+    dist=dist1;
+    return dist;
+    }else{
+      return 0;
+    } 
+}
+int CheckRight(int leng, int dist1){
+    int deg;
+    Turnright(90);
+    Forward(leng);
+    Turnleft(90);
+    dist=CheckDistance();
+    if(dist<=0 || dist>=10){
+    dist=dist1;
+    return dist;
+    }else{
+      return 0;
+    } 
+}
+
+void SetOrth(){
+  
+}
+
+void DriveIn(){
+  int deg;
+  int dist;
+  int leng;
+  int i=0;
+  int k=0;
+  int disL,disR;
+  Find:                                                               // Start Find
+
+  dist=CheckDistance(90);
+  distL=CheckDistance(135);
+  distR=CheckDistance(45);
+  if(distL>=100 && distR>=100){
+    Forward();
+    distL=CheckDistance(135);
+    distR=CheckDistance(45);
+    if(distL>=100 && distR<=100){       //Rightish side Entrance
+      For(distR<=100){
+        TurnRight(5);
+        distR=CheckDistance(45);
+      }
+      TurnRight(90);
+      dist=CheckDistance(180);
+      For(dist<=100){
+        Forward();
+        dist=CheckDistance(180);
+      }
+      Forward();
+      TurnLeft(90);
+      Forward();
+      TurnLeft(90);
+      Forward();
+    }else if(distL<=100 && distR>=100){    //Leftish Side Entrance
+      For(distL<=100){
+        TurnLeft(5);
+        distL=CheckDistance(135);
+      }
+      TurnLeft(90);
+       dist=CheckDistance(0);
+      For(dist<=100){
+        Forward();
+        dist=CheckDistance(0);
+      }
+      Forward();
+      TurnRight(90);
+      Forward();
+      TurnRight(90);
+      Forward();
+    }else if(distL>=100 && distR>=100){       // Entrance otherside
+      TurnLeft(45);
+      Forward(2*);
+      dist=CheckRight(180);
+      if(dist<=100){
+     Ride:For(dist<=100){
+          Forward();
+          dist=CheckRight(180);
+        }
+        TurnRight(90);
+        Forward();
+        TurnRight(90);
+        Forward();
+      }else if(dist>=100);
+      Forward();
+      TurnRight(90);
+      Forward();
+      goto Ride;
+      
+    }
+  }
+
+  if(CheckGround(LS)==0 && CheckGround(RS) == 0){
+    Forward();
+    OpenClamp();
+    Turnleft(90);
+    Forward();
+    if(CheckGround(LS)==1 && CheckGround(RS) == 1){
+      return;
+    }
+    else{
+      Forward();
+      return;
+    }
+  }
+  else{
+    goto Find;
+  }
+}
