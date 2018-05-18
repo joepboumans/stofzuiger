@@ -1,12 +1,5 @@
 int US=A0;
 int UTRASOUNDSERVO=13;
- 
-int CheckRock(int PinLoc){
-  if(digitalRead(PinLoc) ==0){
-    return 0;
-  }else{ return 1;
-}
-}
 
 #include<Servo.h>
 
@@ -20,7 +13,7 @@ void setup()
 
 void loop()
 {
-  if(USmeasure() >= 10) // Forward
+  if(USmeasure() > 10) // Forward
   {Forward}
   else if(USmeasure() <= 10)// Turn Left
   {BackLeft}
