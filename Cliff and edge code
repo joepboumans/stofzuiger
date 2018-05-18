@@ -1,1 +1,34 @@
+int RS=A0;
+int LS=A1;
+int RIGHTSERVO=13;
+int LEFTSERVO=12;
 
+int CheckGround(int PinLoc){
+  if(digitalRead(PinLoc) ==0){
+    return 0;
+  }else{ return 1;
+}
+}
+
+#include<Servo.h>
+
+void setup()
+{
+  Serial.begin(9600)
+  pinMode(LS, INPUT);
+  pinMode(RS, INPUT);
+  pinMode(LEFTSERVO, OUTPUT);
+  pinMode(RIGHTSERVO, OUTPUT);
+}
+
+void loop()
+{
+  if(CheckGround(LS) && CheckGround(RS)) // Forward
+  {Forward}
+  else if(CheckGround(LS) && !CheckGround(RS))// Turn Left
+  {BackLeft}
+  else if(!CheckGround(LS) && CheckGround(RS))// Turn Right
+  {BackRight}
+  else if(!CheckGround(LS) && !CheckGround(RS))// Turn Left/Right
+  {BackRight}
+}
