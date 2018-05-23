@@ -25,10 +25,6 @@ int CheckRight(int leng, int dist1){
     } 
 }
 
-void SetOrth(){
-  
-}
-
 void DriveIn(){
   int deg;
   int dist;
@@ -98,7 +94,7 @@ void DriveIn(){
       
     }
   }
-
+RideIn:
   if(CheckGround(LS)==0 && CheckGround(RS) == 0){
     Forward();
     OpenClamp();
@@ -111,8 +107,18 @@ void DriveIn(){
       Forward();
       return;
     }
+  }else if(CheckGround(LS)==0){
+    Forward();
+    For(CheckGround(RS)!=0){
+        TurnLeft(5);
+    }
+    goto RideIn;
+  }else if(CheckGround(RS)==0){
+    Forward();
+    For(CheckGround(LS)!=0){
+        TurnRight(5);
+    }
+    goto RideIn;
   }
-  else{
-    goto Find;
-  }
+  return;
 }
