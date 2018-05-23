@@ -1,0 +1,53 @@
+#include <Servo.h>
+  
+const int pingPin = 9;
+Servo USservo;
+
+void setup() {
+  USservo.attach(11);
+  Serial.begin(9600);
+  USservo.write(180);
+  delay(500);
+  }
+
+void loop() {
+  int file[90]={};
+  delay(1000);
+
+  for(int i=90;i>0;i--){
+    USservo.write(i*2);
+    delay(20);
+    file[i]=USmeasure();
+    delay(20);
+  }
+
+
+  //delay(100);
+  for(int i=0; i<90; i++){
+    Serial.print(2*i);
+    Serial.print(",");
+    Serial.println(file[90-i]);
+    delay(10);
+  }
+  
+  delay(9999999999);
+}
+
+
+long microsecondsToCentimeters(long microseconds) {
+  return microseconds / 29 / 2;
+}
+
+int USmeasure(){
+  long duration, inches, cm;
+  pinMode(pingPin, OUTPUT);
+  digitalWrite(pingPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(pingPin, HIGH);
+  delayMicroseconds(5);
+  digitalWrite(pingPin, LOW);
+  pinMode(pingPin, INPUT);
+  duration = pulseIn(pingPin, HIGH);
+  cm = microsecondsToCentimeters(duration);
+  return cm;
+}
