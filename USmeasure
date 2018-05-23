@@ -1,0 +1,14 @@
+int USmeasure(int angle){
+  USservo.write(angle);
+  long duration, inches, cm;
+  pinMode(pingPin, OUTPUT);
+  digitalWrite(pingPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(pingPin, HIGH);
+  delayMicroseconds(5);
+  digitalWrite(pingPin, LOW);
+  pinMode(pingPin, INPUT);
+  duration = pulseIn(pingPin, HIGH);
+  cm = duration / 29 / 2;
+  return cm;
+}
