@@ -6,6 +6,7 @@
  int LS=A1;
  int RIGHTSERVO=13;
  int LEFTSERVO=12;
+ float forwardtime=;
  
 //Functions
 void Forward(float distanceF, float forwardspeedF) {
@@ -42,6 +43,22 @@ float result;
 void Stop() {
     servoLeft.write(90);
     servoRight.write(90);
+}
+
+
+int CheckRock(int PinLoc){
+  if(digitalRead(PinLoc) ==0){
+    return 0;
+  }else{ return 1;
+ }
+}
+
+void check(){
+if (CheckRock(US)<=5){
+Stop();
+pickup(forwardtime);
+ReturnLab();
+return;
 }
 
 \\Setup
