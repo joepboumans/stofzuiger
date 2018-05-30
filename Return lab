@@ -31,8 +31,9 @@ void SearchLab(int Sensor){
 void CheckCourse(int Sensor){
   int K = 1;
   while (K=1){
+    Forward();
     CurrOut = AnalogOutput(Sensor);
-    if (CurrOut < PrevOut){
+    if (CurrOut < (PrevOut-0.3)){
       stopRobot();
       K=0;
     }
@@ -43,10 +44,10 @@ void CheckCourse(int Sensor){
 }
 
 void ReturnLab(){
-//while the lab hasnt been found
-SearchLab();
-forward();
-CheckCourse();
+while(AnalogOutput(S_Beacon)<1){
+  SearchLab();
+  CheckCourse();
+  }
 }
 
 
