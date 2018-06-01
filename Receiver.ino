@@ -3,17 +3,21 @@ void setup() {
 }
 
 void loop() {//Robot1 on the ramp robot 2 found the lab too
- int message1;
+ int message;
   if (Serial.available()>0 && FoundLab) {
-     message1= Serial.write(Serial.read());
-   if(message1==1){
-  while(message1==1 )
-  {stop(Robot2);}
+     message= Serial.write(Serial.read());
+   if(message==1){
+  while(message==1 )
+  {stop();//robot2}
     }}
 
-   else 
-    if(Serial.available()>0 && !FoundLab) { //continue doing what it was doing 
-      
+  // else 
+    //if(Serial.available()>0 && !FoundLab) { //continue doing what it was doing 
+     // if( no rock found)
+     // search rock
+     //else
+     //if (no lab found)
+    //ReturnLab();
     }
     
   
