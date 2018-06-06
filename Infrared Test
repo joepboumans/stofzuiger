@@ -87,8 +87,16 @@ void loop() {
   if(CheckGround(LS)==1 && CheckGround(RS)==1){
     Forward();
   }
-  else if(CheckGround(LS)!=1 && CheckGround(RS)!=1){// Turn 
+  else if(CheckGround(LS)!=1 && CheckGround(RS)!=1){ 
     Stop();
-    TurnRight(130);   
+    TurnRightD(130);   
+  }
+  else if(CheckGround(LS)!=1){// Turn 
+    Stop();
+    TurnRightD(130);   
+  }
+  else if(CheckGround(RS)!=1){// Turn 
+    Stop();
+    TurnLeftD(130);   
   }
 }
