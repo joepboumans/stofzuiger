@@ -1,0 +1,13 @@
+/*
+Fill in motor speeds ranging from -90 (backwards) to 90 (forwards)
+Argument 1: left wheel speed
+Argument 2: right wheel speed
+*/
+
+void drive(int LeftWheel,int RightWheel){
+  
+  if(LeftWheel == 0) servoLeft.writeMicroseconds(1500);
+  else servoLeft.write(90+LeftWheel);
+  if(RightWheel == 0) servoRight.writeMicroseconds(1500);
+  else servoRight.write(90-RightWheel);
+}
