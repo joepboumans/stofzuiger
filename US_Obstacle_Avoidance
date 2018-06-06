@@ -18,26 +18,32 @@ void setup() {
 void loop() {
   int m = USmeasure(135);
   //delay(50);
-  if(m<30) left=true;
-  else left=false;
-  //delay(200);
+  if(m<30){ 
+    TurnLeft();
+    delay(200);
+  }//left=true;
+  //else left=false;
   int n = USmeasure(65);
   //delay(50);
-  if(n <25) right=true;
-  else right = false;
-  //delay(200);
-  if(right && !left){
-      TurnLeft(45);
+  if(n <25){
+    TurnRight();
+     delay(200);
+//right=true;
   }
-  else if(left && !right){
-      TurnRight(45);
-  }
-  else if(left && right){
-    TurnLeft(180);
-  }
+  //else right = false;
+  //if(right && !left){
+  //    TurnLeft(45);
+  //}
+  //else if(left && !right){
+  //    TurnRight(45);
+  //}
+  //else if(left && right){
+  //  TurnLeft(180);
+  //}
   else{
       servoRight.write(0);
       servoLeft.write(180);
+      delay(200);
   }
 }
 
