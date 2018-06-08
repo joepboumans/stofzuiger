@@ -1,5 +1,7 @@
 #include <Servo.h>
+
 //Constants
+
 const int pingPin = 9;
 const float speed = 0.23;
 const float rotatespeed= 0.50 ;
@@ -7,14 +9,14 @@ int RS=A0;
 int LS=A1;
 int RIGHTSERVO=13;
 int LEFTSERVO=12;
-//int US=A0;
 int UTRASOUNDSERVO=13;
 int encoderLeft=7;
 int encoderRight=8;
 Servo servoLeft, servoRight, servoGripper, servoEyes;
+
 //Functions
 
-int CheckGroundL(int PinLoc){
+int CheckGroundL(int PinLoc){ //Checking left ground sensor
   if(analogRead(PinLoc)>=300){
   return 1;
   }else{
@@ -22,7 +24,7 @@ int CheckGroundL(int PinLoc){
   }
 }
 
-int CheckGroundR(int PinLoc){
+int CheckGroundR(int PinLoc){ //Checking right ground sensor
   if(analogRead(PinLoc)>=400){
   return 1;
   }else{
@@ -31,7 +33,7 @@ int CheckGroundR(int PinLoc){
 }
 
 int USmeasure(int angle){
-  servoEyes.write(angle);
+  servoEyes.write(angle); //First look at the right angle
   delay(500);
   long duration, inches, cm;
   pinMode(pingPin, OUTPUT);
@@ -42,25 +44,25 @@ int USmeasure(int angle){
   digitalWrite(pingPin, LOW);
   pinMode(pingPin, INPUT);
   duration = pulseIn(pingPin, HIGH);
-  cm = duration / 29 / 2;
+  cm = duration / 29 / 2; //Basically, measuring the distance
   return cm;
 }
 
-void ForwardD(float distanceF, float forwardspeedF) {
+void ForwardD(float distanceF, float forwardspeedF) { //Function for going forward a certain distance & speed
   float result;
   result = (distanceF / forwardspeedF) * 1000;
-  servoLeft.writeMicroseconds(1900);         // Left wheel counterclockwise
+  servoLeft.writeMicroseconds(1900);        
   servoRight.writeMicroseconds(1000);
   delay(result);
   //Serial.println("ForwardD");
 }
 
-void Reverse() {
+void Reverse() { //going backwards
   servoLeft.write(0);
   servoRight.write(180);
 }
 
-void TurnLeftD(int degrees) {
+void TurnLeftD(int degrees) { //Function for turning left at a certain degree
     float result;
     result = (degrees / (rotatespeed * 360)) * 1000;
     //Serial.println("Result computed: ");
@@ -72,13 +74,13 @@ void TurnLeftD(int degrees) {
     delay(result);
 }
 
-void TurnLeft() {
+void TurnLeft() { //Turning left until the calling function tells it to do something else
   servoLeft.write(0);
   servoRight.write(0);
   //Serial.println("TurnLeft");
 }
 
-void TurnRightD(int degrees){
+void TurnRightD(int degrees){ //Function for turning right at a certain degree
 float result;
     result = (degrees / (rotatespeed * 360)) * 1000;
     //Serial.println("Result computed: ");
@@ -90,17 +92,17 @@ float result;
     delay(result);
 }
 
-void TurnRight(){
+void TurnRight(){ //Turning left until the calling function tells it to do something else
   servoLeft.write(180);
   servoRight.write(180);
   //Serial.println("TurnRight");
 }
 
-void Stop() {
+void Stop() { //Stopping until the calling function tells it to do something else
     servoLeft.write(90);
     servoRight.write(90);
 }
-void Forward(){
+void Forward(){ //Forward until the calling function tells it to do something else
   servoLeft.write(115);
   servoRight.write(65);
   //Serial.println("Forward");
@@ -108,66 +110,69 @@ void Forward(){
 
 void Groundmovement(){
   int left,right;
-  left=analogRead(LS);
-  right=analogRead(RS);
-  Serial.print("Left=");
-  Serial.println(left);
-  Serial.print("Right=");
-  Serial.println(right);
-  if(CheckGroundL(LS)==1 && CheckGroundR(RS)==1){
+  left=analogRead(LS); //measure left IR value
+  right=analogRead(RS); //measure right IR value
+  //Serial.print("Left=");
+  //Serial.println(left);
+  //Serial.print("Right=");
+  //Serial.println(right);
+  if(CheckGroundL(LS)==1 && CheckGroundR(RS)==1){ //Both sides white->go forward
     Forward();
-    Serial.println("GroundForward");
+    //Serial.println("GroundForward");
   }
-  else if(CheckGroundL(LS)!=1 && CheckGroundR(RS)!=1){ 
+  else if(CheckGroundL(LS)!=1 && CheckGroundR(RS)!=1){ //Both sides black-> turn
     Reverse();
+    delay(100);
     TurnRightD(130);   
-    Serial.println("GroundBoth");
+    //Serial.println("GroundBoth");
   }
-  else if(CheckGroundL(LS)!=1){
-    Reverse();
+  else if(CheckGroundL(LS)!=1){ //Left side black -> go right
+    Stop();
+    delay(50);
     TurnRightD(130);   
-    Serial.println("GroundRight");
+    //Serial.println("GroundRight");
   }
-  else if(CheckGroundR(RS)!=1){ 
-    Reverse();
+  else if(CheckGroundR(RS)!=1){ //Right side black -> go left
+    Stop();
+    delay(50);
     TurnLeftD(130);  
-    Serial.println("GroundLeft"); 
+    //Serial.println("GroundLeft"); 
   }
 }
 
 void Hilldodging(){
-  int m = USmeasure(140);
-   if(m<30){ 
+  int m = USmeasure(140);    //measure left
+   if(m<30){     //if something is closer than 30cm, turn right
     Stop();
     delay(50);
     TurnRight();
     delay(1000);
-    Serial.println("HillRight");
+    //Serial.println("HillRight");
   }
-   else{
+   else{      //nothing on the left, check right
     int n = USmeasure(40);
-    if (n<30){
+    if (n<30){    //if something is closer than 30cm, turn left
     Stop();
     delay(50);
     TurnLeft();
     delay(1000);
-    Serial.println("HillLeft");
+    //Serial.println("HillLeft");
     }
-    else{
+    else{     //nothing on both sides, go forward
     Forward();
-    Serial.println("HillForward");
+    //Serial.println("HillForward");
     }
   }
 }
 
 
 
-void setup() {
+void setup() { //setting up all the servos
   servoEyes.attach(11);
   servoEyes.write(90);
   servoRight.attach(13);
   servoLeft.attach(12);
-  servoGripper.attach(10);// attaches the servo on pin 9 to the servo object
+  servoGripper.attach(10);
   servoGripper.write(90);
   pinMode(encoderLeft, INPUT);
   pinMode(encoderRight,INPUT);
@@ -180,7 +185,7 @@ void setup() {
 
 }
 
-void loop() {
+void loop() { //constantly check for ground and hills
  Groundmovement();
  Hilldodging();
 }
