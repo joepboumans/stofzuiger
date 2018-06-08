@@ -1,41 +1,35 @@
 int S_Beacon;// =Sensor pin
 int IRVolt;
-int CurrOut = 0;
-int PrevOut = 0;
 int Ex = 0;
 float MapIR;
 float Volt_Low;//=lowvalue
 float Volt_High;//=highvalue
 
-int AnalogOutput(int Sensor){
-  IRVolt = analogRead(Sensor);
-  MapIR = map(IRVolt, Volt_Low, Volt_High, 0, 255);
-  return MapIR;
-}
-
 void SearchLab(int Sensor){
-  int K = 1;
-  while (K=1){
-    CurrOut = AnalogOutput(Sensor);
-    if (CurrOut < PrevOut){
-      TurnLeft(15);
-      K=0;
+  int CurrOut = 0;
+  int PrevOut = 0;
+  while (1){
+    CurrOut = analogRead(Sensor);
+    if (CurrOut < (PrevOut-15)){
+      TurnLeft();
+      break;
     }
     else{
       PrevOut = CurrOut;
-      TurnRight(15); //Keep going in a circle until the intensity starts lowering
+      TurnRight(); //Keep going in a circle until the intensity starts lowering
     }
   }
 }
 
 void CheckCourse(int Sensor){
-  int K = 1;
-  while (K=1){
+  int CurrOut = 0;
+  int PrevOut = 0;
+  while (1){
     Forward();
-    CurrOut = AnalogOutput(Sensor);
-    if (CurrOut < (PrevOut-0.3)){
+    CurrOut = analogRead(Sensor);
+    if (CurrOut < (PrevOut-15)){
       stopRobot();
-      K=0;
+      break;
     }
     else{
       PrevOut = CurrOut;
@@ -44,7 +38,7 @@ void CheckCourse(int Sensor){
 }
 
 void ReturnLab(){
-while(AnalogOutput(S_Beacon)<1){
+while(analogRead(S_Beacon)<100){
   SearchLab();
   CheckCourse();
   }
