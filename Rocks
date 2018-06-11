@@ -1,49 +1,93 @@
-int LS=A0;
-int RS=A1;
-int US=A3;
-int ULTRASOUNDSERVO=13;
+#include <Servo.h>
 
-int CheckRock(int PinLoc){
-  if(digitalRead(PinLoc) ==0){
-    return 0;
-  }else{ return 1;
-}
-}
-#include<Servo.h>
+//Constants
 
-void setup()
-{
-  Serial.begin(9600)
+ const float speed = 0.23;
+ const float rotatespeed= 1 ;
+ int RS=A0;  
+ int LS=A1;
+ int RIGHTSERVO=13;
+ int LEFTSERVO=12;
+ float forwardtime=1;
+ const int pingPin = 9;
+ int BaseDist=1;
+ int forwardspeedF=1;
+Servo USservo;
+ Servo servoLeft, servoRight, servoGripper, servoEyes;
+ int encoderLeft=7;
+int encoderRight=8;
+int frontpin=A3;
+
+// Functions
+
+void Stop() {
+    servoLeft.writeMicroseconds(1500);
+    servoRight.writeMicroseconds(1500);
+}
+void Forward(){
+  servoLeft.write(180);
+   servoRight.write(0);
+}
+
+void CheckRock(){
+  int rock = analogRead(frontpin);
+  Serial.println(rock);
+  servoGripper.write(180);
+  if(rock>=220){
+    Stop();
+    delay(100);
+    pickup();
+    delay(300);
+    rock = analogRead(frontpin);
+    
+    }
+    servoGripper.write(180);
+  if(rock>=340){
+   // ReturnLab();
+   Stop();
+   
+   delay(100);
+   Serial.println("Found");
+   delay(10000);
+  }
+  return;
+}
+
+void pickup(){
+  int rock=0;
+  int i=0;
+  servoGripper.write(180);
+  delay(750);
+  while(rock<=300 && i<25){
+    rock = analogRead(frontpin);
+    Forward();
+    delay(100);
+    i++;
+  }
+  Stop();
+  delay(100);
+  servoGripper.write(0);
+  delay(750);
+}
+void setup(){
+  servoEyes.attach(11);
+  servoEyes.write(90);
+  servoRight.attach(13);
+  servoLeft.attach(12);
+  servoGripper.attach(10);// attaches the servo on pin 9 to the servo object
+  servoGripper.write(90);
+  pinMode(encoderLeft, INPUT);
+  pinMode(encoderRight,INPUT);
   pinMode(LS, INPUT);
   pinMode(RS, INPUT);
-  pinMode(US, INPUT);
   pinMode(LEFTSERVO, OUTPUT);
   pinMode(RIGHTSERVO, OUTPUT);
+  Serial.begin(9600);
 }
-
-void loop()
-{
- 
-  if(digitalRead(LS) && !digitalRead(RS) )// Turn Left
-  { turnleft();}
-  if(!digitalRead(LS) && digitalRead(RS) )// Turn Right
-  {turnright(); }
-   if(digitalRead(LS) && digitalRead(RS) ) //Go forward
-  { forward(distanceF,forwardspeedF);
-  distancefront=USmeasure();
-  check(distancefront);
-
-  }
+void loop() {
+  int rock = analogRead(frontpin);
+  Serial.println(rock);
+  CheckRock();
+  Forward();
   
 }
-void check(int cm){
-if (CheckRock(US) && cm<=5)
-{stopRobot();
-pickup(forwardtime);
-ReturnLab();
-return;
-}
-
-}
-
- 
