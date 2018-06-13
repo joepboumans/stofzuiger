@@ -13,7 +13,9 @@ int UTRASOUNDSERVO=13;
 int encoderLeft=7;
 int encoderRight=8;
 int frontpin=A3;
+int FrontLab=A2;
 int k=0;
+int found=0;
 Servo servoLeft, servoRight, servoGripper, servoEyes;
 
 //Functions
@@ -149,9 +151,9 @@ void setup() { //setting up all the servos
 }
 
 void loop() { //constantly check for ground and hills
-  int currT=millis();
-  int USL=USmeasure(90);
+  int US=USmeasure(90);
   int rock = analogRead(frontpin);
+
   if(CheckGroundL(LS)==1 && CheckGroundR(RS)==1){ //Both sides white->go forward
     Forward();
   }
@@ -177,13 +179,13 @@ void loop() { //constantly check for ground and hills
     Serial.println("TurnLeft"); 
   }
  
-  if(USL<25){
+  if(US<25){
     Stop();
     delay(100);
     TurnRight();
     delay(1000);
   }
-  if(rock>=380){
+  if(rock>=380 && found==0){
     Stop();
     delay(100);
     pickup();
@@ -192,15 +194,15 @@ void loop() { //constantly check for ground and hills
     delay(500);
     rock = analogRead(frontpin);
     if(rock>=400){
-    //ReturnLab();
+    found=1;
     Stop();
-    delay(410);
-    while(k=10){
-      rock = analogRead(frontpin);
-      Serial.println(rock);
-    }
+    delay(100);
+    
   }else{
     pickup();
   }
+}
+if(found==1){
+  
 }
 }
