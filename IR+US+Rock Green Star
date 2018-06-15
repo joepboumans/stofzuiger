@@ -21,6 +21,8 @@ Servo servoLeft, servoRight, servoGripper, servoEyes;
 //Functions
 
 int CheckGroundL(int PinLoc){ //Checking left ground sensor
+  //Serial.print("Left =");
+  //Serial.println(analogRead(PinLoc));
   if(analogRead(PinLoc)>=300){
   return 1;
   }else{
@@ -29,6 +31,8 @@ int CheckGroundL(int PinLoc){ //Checking left ground sensor
 }
 
 int CheckGroundR(int PinLoc){ //Checking right ground sensor
+  //Serial.print("Right =");
+  //Serial.println(analogRead(PinLoc));
   if(analogRead(PinLoc)>=400){
   return 1;
   }else{
@@ -84,7 +88,7 @@ void TurnLeft() { //Turning left until the calling function tells it to do somet
 }
 
 void TurnRightD(int degrees){ //Function for turning right at a certain degree
-float result;
+    float result;
     result = (degrees / (rotatespeed * 360)) * 1000;
     //Serial.println("Result computed: ");
     //Serial.print(result);
@@ -159,24 +163,24 @@ void loop() { //constantly check for ground and hills
   }
   else if(CheckGroundL(LS)!=1 && CheckGroundR(RS)!=1){ //Both sides black-> turn
     Reverse();
-    delay(250);
+    delay(400);
     TurnRightD(130);
     delay(100);   
-    Serial.println("Both");
+    //Serial.println("Both");
   }
   else if(CheckGroundL(LS)!=1){ //Left side black -> go right
     Reverse();
     delay(250);
     TurnRightD(130);
     delay(100);      
-    Serial.println("TurnRight");
+    //Serial.println("TurnRight");
   }
   else if(CheckGroundR(RS)!=1){ //Right side black -> go left
     Reverse();
     delay(250);
     TurnLeftD(130); 
     delay(100);    
-    Serial.println("TurnLeft"); 
+    //Serial.println("TurnLeft"); 
   }
  
   if(US<25){
