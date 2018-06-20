@@ -1,0 +1,115 @@
+#include <Servo.h>
+int RS=A0;
+int LS=A1;
+int pingPin = 9;
+Servo USservo;
+Servo servoRight;
+Servo servoLeft;
+Servo Clamps;
+int Threshold = 500;
+
+int CheckGround(int PinLoc){
+  if(digitalRead(PinLoc) ==0){
+    return 0;
+  }else{ return 1;
+}
+}
+
+void setup() {
+    USservo.attach(11);
+  Serial.begin(9600);
+  pinMode(LS, INPUT);
+  pinMode(RS, INPUT);
+  servoRight.attach(13);
+  servoLeft.attach(12);
+  Clamps.attach(10);
+  delay(100);
+  Clamps.write(130);
+  delay(999);
+
+}
+
+void loop() {
+  drive(30,30);
+  
+  while(analogRead(RS) > Threshold && analogRead(LS) > Threshold){
+    delay(10);
+  }
+    if(analogRead(RS) < Threshold){
+      while(true){
+        if(analogRead(RS) < Threshold){
+          drive(0,30);
+        }else{
+          drive(30,0);
+        }
+
+       if(USmeasure(90)<6)break;
+        
+      }
+      
+    }
+    if(analogRead(LS) < Threshold){
+      while(true){
+        if(analogRead(LS) < Threshold){
+          drive(30,0);
+        }else{
+          drive(0,30);
+        }
+        if(USmeasure(90)<3){   
+          drive(0,0);
+          break;
+        }
+
+      }
+      
+    }
+
+  
+  letgo();
+  driveofframp();
+  drive(-10,-90);
+  delay(1000);
+  drive(0,0);
+
+  delay(999999999);
+  
+
+}
+int USmeasure(int angle){
+  USservo.write(angle);
+  delay(10);
+  long duration, inches, cm;
+  pinMode(pingPin, OUTPUT);
+  digitalWrite(pingPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(pingPin, HIGH);
+  delayMicroseconds(5);
+  digitalWrite(pingPin, LOW);
+  pinMode(pingPin, INPUT);
+  duration = pulseIn(pingPin, HIGH);
+  cm = duration / 29 / 2;
+  return cm;
+}
+void letgo(){
+  Clamps.write(30);
+  delay(1000);
+  //Clamps.write(90);
+  
+}
+void driveofframp(){
+  USmeasure(0);
+  delay(1000);
+  while(USmeasure(0) < 20){
+          drive(-30,-30);  
+  }
+  delay(500);
+  
+}
+
+void drive(int LeftWheel,int RightWheel){
+  
+  if(LeftWheel == 0) servoLeft.writeMicroseconds(1510);
+  else servoLeft.write(90+LeftWheel);
+  if(RightWheel == 0) servoRight.writeMicroseconds(1505);
+  else servoRight.write(90-RightWheel);
+}
