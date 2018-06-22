@@ -54,15 +54,15 @@ void TurnLeftD(int degrees) { //Function for turning left at a certain degree
 
 //Returning functions
 void SearchLab(int Sensor){
-  Serial.println("A");
+  //Serial.println("A");
   int Max = 0;
   int CurrOut = 0;
   for(int i=0; i<24; i++){
     CurrOut = analogRead(Sensor);
-    Serial.println(CurrOut);
+    //Serial.println(CurrOut);
     if (CurrOut > Max){
       Max = CurrOut;
-      Serial.println(Max);
+      //Serial.println(Max);
     }
     Stop();
     TurnLeftD(30);
@@ -98,12 +98,11 @@ void CheckCourse(int Sensor){
 }
 
 void ReturnLab(){
-  Serial.print("JA ");
-  Serial.println(analogRead(FrontLab));
+  //Serial.println(analogRead(FrontLab));
 while(analogRead(FrontLab)>300){
-  Serial.println("Searching Lab");
+  //Serial.println("Searching Lab");
   SearchLab(FrontLab);
-  Serial.println("Checking Course!");
+  //Serial.println("Checking Course!");
   CheckCourse(FrontLab);
   }
 }
@@ -116,11 +115,10 @@ void setup() { //setting up all the servos
 }
 
 void loop(){
-  //Serial.println("DOET IE HET UBERHAUPT GODVERDOMME");
-    Serial.println(analogRead(FrontLab));
+  //Serial.println(analogRead(FrontLab));
 
-  //Stop();
-  //ReturnLab();
-  //delay(10000);
+  Stop();
+  ReturnLab();
+  delay(10000);
 }
 
